@@ -9,11 +9,11 @@ void sort(int profit[], int weight[], int n)
     for(i = 0; i < n; i++)
         ratio[i] = (float)profit[i] / weight[i];
 
-    for(i = 0; i < n; i++)
+    for(i = 0; i < n - 1; i++)
     {
-        for(j = 0; j < n - i - 1; j++)
+        for(j = i+1; j < n ; j++)
         {
-            if(ratio[j+1] > ratio[j])
+            if(ratio[j] > ratio[i])
             {
                 temp = ratio[j+1];
                 ratio[j+1] = ratio[j];
