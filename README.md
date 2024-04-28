@@ -1,2 +1,2 @@
 # dsa
-to store codes of dsa
+to store codes for dsa
