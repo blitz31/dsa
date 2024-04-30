@@ -15,17 +15,17 @@ void sort(int profit[], int weight[], int n)
         {
             if(ratio[j] > ratio[i])
             {
-                temp = ratio[j+1];
-                ratio[j+1] = ratio[j];
-                ratio[j] = temp;
+                temp = ratio[j];
+                ratio[j] = ratio[i];
+                ratio[i] = temp;
 
-                temp = profit[j+1];
-                profit[j+1] = profit[j];
-                profit[j] = temp;
+                temp = profit[j];
+                profit[j] = profit[i];
+                profit[i] = temp;
 
-                temp = weight[j+1];
-                weight[j+1] = weight[j];
-                weight[j] = temp;
+                temp = weight[j];
+                weight[j] = weight[i];
+                weight[i] = temp;
             }
         }
     }
