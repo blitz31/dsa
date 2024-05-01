@@ -1,7 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
+float arr[50]={0};
+int capacity[50]={0};
 
-void sort(int profit[], int weight[], int n)
+void sort(int itemno[], int profit[], int weight[], int n)
 {
     int i, j, temp;
     float ratio[50];
@@ -18,6 +20,10 @@ void sort(int profit[], int weight[], int n)
                 temp = ratio[j];
                 ratio[j] = ratio[i];
                 ratio[i] = temp;
+                
+                temp = itemno[j];
+                itemno[j] = itemno[i];
+                itemno[i] = temp;
 
                 temp = profit[j];
                 profit[j] = profit[i];
@@ -31,21 +37,26 @@ void sort(int profit[], int weight[], int n)
     }
 }
 
-float greedyKnapsack(int profit[], int weight[], int n, int capacity)
+float greedyKnapsack(int itemno[], int profit[], int weight[], int n, int rcapacity)
 {
     float maxProfit = 0.0;
     int i;
 
     for(i = 0; i < n; i++)
     {
-        if(weight[i] <= capacity)
+        
+        if(weight[i] <= rcapacity)
         {
             maxProfit = maxProfit + profit[i];
-            capacity = capacity - weight[i];
+            rcapacity = rcapacity - weight[i];
+            arr[itemno[i]] = 1;
+            capacity[i] = rcapacity;
         }
         else
         {
-            maxProfit = maxProfit + (float)profit[i] * capacity / weight[i];
+            maxProfit = maxProfit + (float)profit[i] * rcapacity / weight[i];
+            arr[itemno[i]] = (float)rcapacity / weight[i];
+            capacity[i] = rcapacity;
             break;
         }
     }
@@ -53,37 +64,48 @@ float greedyKnapsack(int profit[], int weight[], int n, int capacity)
     return maxProfit;
 }
 
-
-void displayTable(int profit[], int weight[], int n)
+void displayTable(int itemno[], int profit[], int weight[], int n)
 {
     int i;
 
-    printf("\nItem\tProfit\tWeight\n");
+    printf("\nItem\tProfit\tWeight\tRemaining Capcity\n");
     for(i = 0; i < n; i++)
     {
-        printf("%d\t%d\t%d\n", i+1, profit[i], weight[i]);
+        printf("%d\t%d\t%d\t%d\n", itemno[i], profit[i], weight[i], capacity[i]);
     }
 }
 
+
+
 int main()
 {
-    int i, n, capacity, profit[50], weight[50];
+    int i, n, rcapacity, itemno[50], profit[50], weight[50], tprofit = 0;
 
     printf("\nEnter the number of items: ");
     scanf("%d", &n);
 
     printf("\nEnter the profit and weight of each item:\n");
-    for(i = 0; i < n; i++)
+    for(i = 0; i < n; i++){
         scanf("%d %d", &profit[i], &weight[i]);
+        itemno[i] = i;
+    }
+        
 
     printf("\nEnter the total capacity of the knapsack: ");
-    scanf("%d", &capacity);
+    scanf("%d", &rcapacity);
 
-    displayTable(profit, weight, n);
+    sort(itemno, profit, weight, n);
 
-    sort(profit, weight, n);
-
-    printf("\nMaximum profit: %.2f", greedyKnapsack(profit, weight, n, capacity));
+    tprofit = greedyKnapsack(itemno, profit, weight, n, rcapacity);
+    
+    displayTable(itemno,profit, weight, n);
+    printf("\nMaximum profit = %d", tprofit);
+    
+    printf("\n[ ");
+    for(i=0; i<n; i++){
+        printf("%.2f ", arr[i]);
+    }
+    printf("]");
 
     return 0;
 }
